@@ -29,7 +29,12 @@
  */
 static uint8_t *__sbrk_heap_end = NULL;
 
-static uint32_t sbrk_call_counter = 0;
+/**
+ * Function call counters 
+ */
+static uint32_t __sbrk_call_counter = 0;
+static uint32_t __malloc_call_counter = 0;
+static uint32_t __free_call_counter = 0;
 
 /**
  * @brief _sbrk() allocates memory to the newlib heap and is used by malloc
@@ -61,7 +66,7 @@ void *_sbrk(ptrdiff_t incr)
   const uint8_t *max_heap = (uint8_t *)stack_limit;
   uint8_t *prev_heap_end;
 
-  ++sbrk_call_counter;
+  ++__sbrk_call_counter;
 
   /* Initialize heap end at first call */
   if (NULL == __sbrk_heap_end)
@@ -82,6 +87,27 @@ void *_sbrk(ptrdiff_t incr)
   return (void *)prev_heap_end;
 }
 
+void* __real_malloc(size_t size);
+void __real_free(void* ptr);
+
+void* __wrap_malloc(size_t size) {
+  ++__malloc_call_counter;
+  return __real_malloc(size);
+}
+
+void __wrap_free(void* ptr) {
+  ++__free_call_counter;
+  __real_free(ptr);
+}
+
 uint32_t get_sbrk_call_count(void) {
-  return sbrk_call_counter;
+  return __sbrk_call_counter;
+}
+
+uint32_t get_malloc_call_count(void) {
+  return __malloc_call_counter;
+}
+
+uint32_t get_free_call_count(void) {
+  return __free_call_counter;
 }
