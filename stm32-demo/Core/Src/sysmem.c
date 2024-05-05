@@ -29,6 +29,8 @@
  */
 static uint8_t *__sbrk_heap_end = NULL;
 
+static uint32_t sbrk_call_counter = 0;
+
 /**
  * @brief _sbrk() allocates memory to the newlib heap and is used by malloc
  *        and others from the C library
@@ -59,6 +61,8 @@ void *_sbrk(ptrdiff_t incr)
   const uint8_t *max_heap = (uint8_t *)stack_limit;
   uint8_t *prev_heap_end;
 
+  ++sbrk_call_counter;
+
   /* Initialize heap end at first call */
   if (NULL == __sbrk_heap_end)
   {
@@ -76,4 +80,8 @@ void *_sbrk(ptrdiff_t incr)
   __sbrk_heap_end += incr;
 
   return (void *)prev_heap_end;
+}
+
+uint32_t get_sbrk_call_count(void) {
+  return sbrk_call_counter;
 }
