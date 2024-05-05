@@ -1,12 +1,11 @@
 #include "cpp-code.h"
 #include <map>
 #include <string>
+#include <cstdio>
 
 #include "stm32f1xx_hal.h"
 
-static const unsigned char cpp_text[] = "Hello, stm32 C++ developer!\r\n";
-
-extern UART_HandleTypeDef huart1;
+static const char cpp_text[] = "Hello, stm32 C++ developer!\r\n";
 
 void function_to_investigate()
 {
@@ -20,7 +19,7 @@ void function_to_investigate()
 void print_stat()
 {
     // Some code here should print statistic of _sbrk, malloc, free usage
-    HAL_UART_Transmit(&huart1, cpp_text, sizeof(cpp_text), 100);
+    printf(cpp_text);
 }
 
 void cpp_code_entry_point()

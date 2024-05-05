@@ -49,6 +49,7 @@ Core/Src/syscalls.c
 Я использовал Ubuntu 22.04 LTS, но и на других дистрибутивах должно работать. Тем, кто используют Windows, придётся самим разобраться, как настроить рабочее окружение, тут мои полномочия - всё.
 
 1. Установите компилятор: `sudo apt install gcc-arm-none-eabi`
+`sudo apt-get install libstdc++-arm-none-eabi-newlib`
 
 2. Установите виртуальную машину QEMU с поддержкой ARM: `sudo apt install qemu-system-arm`
 
